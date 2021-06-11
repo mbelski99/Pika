@@ -45,21 +45,21 @@ def pika_animation():
 
 def score_display(game_state):
     if game_state == 'main_game':
-        score_surface = game_font.render(str(int(score)),True,(255,255,255))
+        score_surface = game_font.render(str(int(score)),True,(255,211,31))
         score_rect = score_surface.get_rect(center = (288,100))
         screen.blit(score_surface,score_rect)
 
     if game_state == 'game_over':
-        score_surface = game_font.render(f'Score: {int(score)}', True, (255, 255, 255))
+        score_surface = game_font.render(f'Score: {int(score)}', True, (255,211,31))
         score_rect = score_surface.get_rect(center=(288, 100))
         screen.blit(score_surface, score_rect)
 
-        high_score_surface = game_font.render(f'High Score: {int(high_score)}', True, (255, 255, 255))
+        high_score_surface = game_font.render(f'High Score: {int(high_score)}', True, (255,211,31))
         high_score_rect = high_score_surface.get_rect(center=(288, 850))
         screen.blit(high_score_surface, high_score_rect)
 
 def update_score(score,high_score):
-    if score >high_score:
+    if score > high_score:
         high_score = score
     return high_score
 
@@ -67,7 +67,7 @@ def update_score(score,high_score):
 pygame.init()
 screen = pygame.display.set_mode((576,1024))
 clock = pygame.time.Clock()
-game_font = pygame.font.Font('04B_19.ttf',40)
+game_font = pygame.font.Font('Aleo-Bold.otf',40)
 
 # Game Variables
 gravity = 0.25
@@ -76,7 +76,7 @@ game_active = True
 score = 0
 high_score = 0
 
-bg_surface = pygame.image.load('assets/background-day.png').convert()
+bg_surface = pygame.image.load('assets/bg.png').convert()
 bg_surface = pygame.transform.scale2x(bg_surface)
 
 floor_surface = pygame.image.load('assets/base.png').convert()
@@ -102,12 +102,12 @@ SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE,1200)
 pipe_height = [400,600,800]
 
-game_over_surface = pygame.transform.scale2x(pygame.image.load('assets/message.png').convert_alpha())
+game_over_surface = pygame.transform.scale2x(pygame.image.load('assets/text.png').convert_alpha())
 game_over_rect = game_over_surface.get_rect(center = (288,512))
 
-flap_sound = pygame.mixer.Sound('sound/sfx_wing.wav')
-death_sound = pygame.mixer.Sound('sound/sfx_hit.wav')
-score_sound = pygame.mixer.Sound('sound/sfx_point.wav')
+flap_sound = pygame.mixer.Sound('sound/wing.wav')
+death_sound = pygame.mixer.Sound('sound/hit.wav')
+score_sound = pygame.mixer.Sound('sound/point.wav')
 score_sound_countdown = 100
 
 while True:
@@ -150,8 +150,7 @@ while True:
         screen.blit(rotated_pika,pika_rect)
         game_active = check_collision(pipe_list)
 
-        #Pipes
-
+        #Pipe
         pipe_list = move_pipes(pipe_list)
         draw_pipes(pipe_list)
 
@@ -161,12 +160,13 @@ while True:
         if score_sound_countdown <= 0:
             score_sound.play()
             score_sound_countdown = 100
+
     else:
         screen.blit(game_over_surface,game_over_rect)
         high_score = update_score(score,high_score)
         score_display('game_over')
 
-    #Floot
+    #Floor
     floor_x_pos -= 1
     draw_floor()
     if floor_x_pos <= -576:
